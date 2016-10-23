@@ -1,0 +1,18 @@
+#!/bin/bash -e
+
+if [ "$1" = "" ]; then
+  echo "Missing command, e.g check or midje"
+  exit 1
+fi
+
+for x in *
+do
+  if [ -d "$x" ] && [ "$x" != "nomis-emacs-configuration" ]; then
+    echo "==== $x ===="
+    cd "$x"
+    lein $1 || true
+    cd ..
+  fi
+done
+
+bells
