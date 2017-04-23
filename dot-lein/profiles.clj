@@ -3,15 +3,8 @@
 
 #=(eval
    (merge
-    '{:repl
-      {:dependencies [[org.clojure/tools.nrepl "0.2.12"] ; because Leiningen 2.5.1 pulls in 0.2.6, which is too old
-                      ]
-       :plugins [[cider/cider-nrepl "0.12.0"]
-                 ;; [refactor-nrepl "1.0.5"] ; problems! reverted to 0.13.0
-                 ]}
-      :user
-      {:source-paths ["dev"]
-       :test-paths   ["_nomis-non-vcs-stuff/test"]
+    '{:user
+      {:test-paths   ["_nomis-non-vcs-stuff/test"]
        :dependencies [[org.clojure/tools.namespace "0.2.11"]
                       [walmartlabs/system-viz "0.1.1"]
                       ;; ;; [slamhound "1.3.3"]
