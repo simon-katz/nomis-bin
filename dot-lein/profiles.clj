@@ -5,7 +5,7 @@
    (merge
     '{:user
       {:test-paths   ["_nomis-non-vcs-stuff/test"]
-       :dependencies [[org.clojure/tools.namespace "0.2.11"]
+       :dependencies [[org.clojure/tools.namespace "0.3.0-alpha4"]
                       [walmartlabs/system-viz "0.1.1"]
                       ;; ;; [slamhound "1.3.3"]
                       [spyscope "0.1.5"]
