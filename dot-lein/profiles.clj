@@ -19,7 +19,7 @@
                       ;; [com.nomistech/emacs-hacks-in-clojure "0.1.0-SNAPSHOT"]
                       ;; [com.nomistech/clojure-dev-utils "0.1.0-SNAPSHOT"]
                       ]
-       :plugins [[lein-nomis-ns-graph "0.3.0"]
+       :plugins [[lein-nomis-ns-graph "0.8.0"]
                  ;; [com.jakemccrary/lein-test-refresh "0.9.0"]
                  ;; [lein-auto "0.1.2"]
                  
