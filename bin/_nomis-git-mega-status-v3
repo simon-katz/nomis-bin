@@ -1,0 +1,3 @@
+#!/bin/bash
+
+_nomis-git-mega-status-v2 | less -NR

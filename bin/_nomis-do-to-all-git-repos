@@ -32,7 +32,8 @@ function do_things {
       if [ -d ".git" ]; then
         echo -e "${HIGHLIGHT}__________________________________________________"
         echo -e "${HIGHLIGHT}$PWD$NORMAL"
-        $ARGS || true
+        $ARGS
+        true
       else
         scan *
       fi
