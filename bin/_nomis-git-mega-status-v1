@@ -1,3 +1,0 @@
-#!/bin/bash
-
-_nomis-do-to-all-git-repos git status -s -b
