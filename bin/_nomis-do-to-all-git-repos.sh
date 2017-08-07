@@ -1,4 +1,5 @@
-#!/bin/bash
+# Run this by passing it to bash as a command line arg.
+# This shebang doesn't work on Android: #!/bin/bash
 
 # Do things to all git directories below current directory.
 # Skips directories that contain a file called .ignore
