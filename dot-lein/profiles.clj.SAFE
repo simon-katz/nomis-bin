@@ -24,7 +24,6 @@
                  ;; [lein-auto "0.1.2"]
                  
                  ;; ;; TODO: Remind yourself of these...
-                 ;; [lein-pprint "1.1.1"]
                  ;; [lein-kibit "0.1.2"]
                  ;; [jonase/eastwood "0.2.3"]
                  

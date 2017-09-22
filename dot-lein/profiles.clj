@@ -7,7 +7,8 @@
       {:dependencies [[org.clojure/tools.namespace "0.3.0-alpha4"]
                       [spyscope "0.1.6"]
                       [org.clojure/java.classpath "0.2.3"]]
-       :plugins [[lein-nomis-ns-graph "0.12.0"]]}}
+       :plugins [[lein-pprint "1.1.2"]
+                 [lein-nomis-ns-graph "0.14.1"]]}}
     
     (let [local-extras-file (str (System/getProperty "user.home")
                                  "/.lein/profiles-local-extras.clj")]
