@@ -5,7 +5,7 @@
 # Skips directories that contain a file called .ignore
 
 if [ "$#" -lt 2 ]; then
-    echo "Usage: _nomis-do-to-files pattern command-prefix"
+    echo "Usage: nomis-do-to-files pattern command-prefix"
 fi
 
 pattern="$1"
