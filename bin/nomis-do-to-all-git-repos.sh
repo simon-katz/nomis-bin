@@ -25,7 +25,7 @@ ARGS="$*"
 function do_things {
   local d="$1"
   if [ -d "$d" ]; then
-    if [ -e "$d/.ignore" ]; then 
+    if [ -e "$d/.ignore" ]; then
       echo -e "${HIGHLIGHT}__________________________________________________"
       echo -e "${HIGHLIGHT}Ignoring $d${NORMAL}"
     else
