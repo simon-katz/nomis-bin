@@ -49,7 +49,7 @@ shift $((OPTIND-1))
 # echo rest: $@
 
 if [[ "$ONLY_DIRTY" ]] ; then
-    nomis-do-to-all-git-dirty-repos.sh nomis-git-info.sh
+    nomis-do-to-all-git-dirty-repos nomis-git-info
 else
-    nomis-do-to-all-git-repos.sh nomis-git-info.sh
+    nomis-do-to-all-git-repos nomis-git-info
 fi
