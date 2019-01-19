@@ -1,1 +1,3 @@
+#!/usr/bin/env bash -e
+
 nomis-echo-star-and-at-caller a "b c"

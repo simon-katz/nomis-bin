@@ -1,5 +1,4 @@
-# Run this by passing it to bash as a command line arg.
-# This shebang doesn't work on Android: #!/bin/bash
+#!/usr/bin/env bash
 
 # Short status of current branch.
 git status --short --branch

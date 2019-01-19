@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/usr/bin/env bash -e
 
 if [ "$1" = "" ]; then
   echo "Missing command, e.g check or midje"

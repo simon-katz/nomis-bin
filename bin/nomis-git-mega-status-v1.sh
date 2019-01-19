@@ -1,5 +1,4 @@
-# Run this by passing it to bash as a command line arg.
-# This shebang doesn't work on Android: #!/bin/bash
+#!/usr/bin/env bash -e
 
 # TODO Want an option that isn't about dirtiness, but about whether there is
 #      any output to see (for any branch).

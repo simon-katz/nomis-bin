@@ -1,3 +1,5 @@
+#!/usr/bin/env bash -e
+
 echo "@@@@ in quotes"
 nomis-echo-star-and-at "$@"
 
