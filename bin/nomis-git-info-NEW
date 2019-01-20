@@ -26,9 +26,10 @@ usage() {
     echo "-c             Include 'status'       section even if repo is clean"
     echo "-d             Include 'ahead/behind' section even if no branches are ahead/behind"
     echo "-r             Include 'no remotes'   section even if all branches have a remote"
+    echo "-v             Verbose; equivalent to -bcdr"
 }
 
-while getopts "hs:pmbcdr" option; do
+while getopts "hs:pmbcdrv" option; do
     case "${option}" in
         h)
             usage
@@ -53,6 +54,12 @@ while getopts "hs:pmbcdr" option; do
             print_ahead_or_behind_branches_if_none_p="YES"
             ;;
         r)
+            print_local_branches_with_no_remote_if_none_p=="YES"
+            ;;
+        v)
+            print_branch_p="YES"
+            print_short_status_if_clean_p="YES"
+            print_ahead_or_behind_branches_if_none_p="YES"
             print_local_branches_with_no_remote_if_none_p=="YES"
             ;;
         *)
