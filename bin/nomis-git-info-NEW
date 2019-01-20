@@ -6,6 +6,7 @@ script=$(basename ${BASH_SOURCE[0]})
 
 # Switches
 main_heading=
+no_print_main_heading_if_nothing_to_print=
 no_print_branch_if_master_p=
 no_print_short_status_if_clean_p=
 no_print_ahead_or_behind_branches_if_none_p=
@@ -25,7 +26,7 @@ usage() {
     echo "-r             Omit 'no remotes'   section if all branches have a remote"
 }
 
-while getopts "hs:mcdr" option; do
+while getopts "hs:pmcdr" option; do
     case "${option}" in
         h)
             usage
@@ -33,6 +34,9 @@ while getopts "hs:mcdr" option; do
             ;;
         s)
             main_heading=${OPTARG}
+            ;;
+        p)
+            no_print_main_heading_if_nothing_to_print="YES"
             ;;
         m)
             no_print_branch_if_master_p="YES"
@@ -164,6 +168,10 @@ function maybe_print_local_branches_with_no_remote {
 }
 
 current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+if [[ ! ${no_print_main_heading_if_nothing_to_print} ]] ; then
+    print_main_heading_if_not_already_done
+fi
 
 maybe_print_branch "Current Branch" ${current_branch}
 maybe_print_short_status
