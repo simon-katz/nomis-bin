@@ -25,15 +25,14 @@ function do_things {
   local d="$1"
   if [ -d "$d" ]; then
     if [ -e "$d/.ignore" ]; then
-      echo -e "${HIGHLIGHT}__________________________________________________"
+      echo -e "${HIGHLIGHT}________________________________________________________________________________"
       echo -e "${HIGHLIGHT}Ignoring $d${NORMAL}"
     else
       cd $d > /dev/null
       if [ -d ".git" ]; then
-        # echo -e "${HIGHLIGHT}__________________________________________________"
+        # echo -e "${HIGHLIGHT}________________________________________________________________________________"
         # echo -e "${HIGHLIGHT}$PWD$NORMAL"
-        $ARGS -s "__________________________________________________
-${PWD}"
+        $ARGS -s "${PWD}"
         true
       else
         scan *

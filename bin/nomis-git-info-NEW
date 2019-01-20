@@ -86,12 +86,12 @@ NORMAL=${RESET}
 #   Things that make sense only in some cases:
 #     -d only give info when dirty [this would only apply to current branch]
 
-function with-print-cmd () { echo "\$\$\$\$ $@" ; "$@" ; }
-
 function echo_heading {
-    echo "${HIGHLIGHT}----" \
-         "$1" \
-         "${NORMAL}"
+    echo -e "${HIGHLIGHT}${1}${NORMAL}"
+}
+
+function echo_subheading {
+    echo -e "${HIGHLIGHT}----${1}${NORMAL}"
 }
 
 main_heading_printed_p=
@@ -99,7 +99,8 @@ main_heading_printed_p=
 function print_main_heading_if_not_already_done {
     if [[ ! "${main_heading_printed_p}" ]] ; then
         if [[ ${main_heading} ]] ; then
-            echo "${HIGHLIGHT}${main_heading}${NORMAL}"
+            echo_heading "________________________________________________________________________________"
+            echo_heading "${main_heading}"
         fi
         main_heading_printed_p="YES"
     fi
@@ -111,7 +112,7 @@ function maybe_print_branch {
     if [[ "${branch}" != "master" || ! "${no_print_branch_if_master_p}" ]]
     then
         print_main_heading_if_not_already_done
-        echo_heading "${heading}"
+        echo_subheading "${heading}"
         echo ${branch}
     fi
 }
@@ -121,7 +122,7 @@ function maybe_print_short_status {
     if [[ "${output}" || ! "${no_print_short_status_if_clean_p}" ]]
     then
         print_main_heading_if_not_already_done
-        echo_heading "Short status"
+        echo_subheading "Short status"
         if [[ "${output}" ]] ; then
             echo "${output}"
         else
@@ -135,7 +136,7 @@ function maybe_print_ahead_or_behind_branches {
     if [[ "${output}" || ! "${no_print_ahead_or_behind_branches_if_none_p}" ]]
     then
         print_main_heading_if_not_already_done
-        echo_heading "Branches that are ahead or behind the remote"
+        echo_subheading "Branches that are ahead or behind the remote"
         if [[ "${output}" ]] ; then
             echo "${output}"
         else
@@ -156,7 +157,7 @@ function maybe_print_local_branches_with_no_remote {
     if [[ "${output}" || ! "${no_print_local_branches_with_no_remote_if_none_p}" ]]
     then
         print_main_heading_if_not_already_done
-        echo_heading "Local branches with no remote"
+        echo_subheading "Local branches with no remote"
         if [[ "${output}" ]] ; then
             echo "${output}"
         else
