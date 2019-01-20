@@ -71,21 +71,6 @@ NORMAL=${RESET}
 ################################################################################
 
 
-# Loop over all branches
-
-# Design the switches.
-# - eg
-#
-#   Things that make sense always:
-#     -  print full details [the default]
-#     -c current branch only [default is all branches]
-#     -r only-give-info-when-different-to-remote or when no remote
-#     -  print branch name only when not on master [default: print branch name]
-#     -  print only when something worth saying
-#
-#   Things that make sense only in some cases:
-#     -d only give info when dirty [this would only apply to current branch]
-
 function echo_heading {
     echo -e "${HIGHLIGHT}${1}${NORMAL}"
 }
@@ -111,9 +96,21 @@ function maybe_print_branch {
     local branch="$2"
     if [[ "${branch}" != "master" || ! "${no_print_branch_if_master_p}" ]]
     then
-        print_main_heading_if_not_already_done
-        echo_subheading "${heading}"
-        echo ${branch}
+        # TODO Add a way to not report certain non-master branches.
+        #      - To reproduce the functionality that is/was in
+        #        "nomis-git-mega-status-v2".
+        #        Perhaps a file with lines that are repo / branch pairs.
+        # echo_subheading "${heading}"
+        if [[ ! ( "${branch}" == "putting-this-here-so-i-can-align-things" \
+                      || "${branch}" == "tutorial-18" \
+                      || "${branch}" == "nomis" \
+                      || "${branch}" == "nomis-0-10-0" \
+                      || "${branch}" == "simon-post-dojo-stuff" \
+              ) ]]
+        then
+            print_main_heading_if_not_already_done
+            echo "Current branch: ${branch}"
+        fi
     fi
 }
 
@@ -136,7 +133,7 @@ function maybe_print_ahead_or_behind_branches {
     if [[ "${output}" || ! "${no_print_ahead_or_behind_branches_if_none_p}" ]]
     then
         print_main_heading_if_not_already_done
-        echo_subheading "Branches that are ahead or behind the remote"
+        echo_subheading "Branches that are ahead of or behind the remote"
         if [[ "${output}" ]] ; then
             echo "${output}"
         else
