@@ -29,7 +29,7 @@ while getopts "hd" o; do
             exit 0
             ;;
         d)
-            shift
+            shift # TODO Where did this `shift` come from? It's wrong, right?
             ONLY_DIRTY="YES" # ${OPTARG}  # Leave OPTARG here as a reminder.
             ;;
         ?)

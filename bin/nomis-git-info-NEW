@@ -1,0 +1,173 @@
+#!/usr/bin/env bash
+
+#### Options and usage
+
+script=$(basename ${BASH_SOURCE[0]})
+
+# Switches
+main_heading=
+no_print_branch_if_master_p=
+no_print_short_status_if_clean_p=
+no_print_ahead_or_behind_branches_if_none_p=
+no_print_local_branches_with_no_remote_if_none_p=
+
+usage() {
+    echo "Usage:"
+    echo ""
+    echo "$(basename ${BASH_SOURCE[0]}) [options]"
+    echo ""
+    echo "options:"
+    echo "-h             Print this help"
+    echo "-s <heading>   A heading, printed only if any output is produced"
+    echo "-m             Omit 'branch name'  section if branch is master"
+    echo "-c             Omit 'status'       section if repo is clean"
+    echo "-d             Omit 'ahead/behind' section if no branches are ahead/behind"
+    echo "-r             Omit 'no remotes'   section if all branches have a remote"
+}
+
+while getopts "hs:mcdr" option; do
+    case "${option}" in
+        h)
+            usage
+            exit 0
+            ;;
+        s)
+            main_heading=${OPTARG}
+            ;;
+        m)
+            no_print_branch_if_master_p="YES"
+            ;;
+        c)
+            no_print_short_status_if_clean_p="YES"
+            ;;
+        d)
+            no_print_ahead_or_behind_branches_if_none_p="YES"
+            ;;
+        r)
+            no_print_local_branches_with_no_remote_if_none_p=="YES"
+            ;;
+        *)
+            usage 1>&2
+            exit 1
+            ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+
+#### Main functionality
+
+################################################################################
+#### Colours
+
+RED=`tput setaf 1`
+GREEN=`tput setaf 2`
+RESET=`tput sgr0`
+
+HIGHLIGHT=${GREEN}
+NORMAL=${RESET}
+
+################################################################################
+
+
+# Loop over all branches
+
+# Design the switches.
+# - eg
+#
+#   Things that make sense always:
+#     -  print full details [the default]
+#     -c current branch only [default is all branches]
+#     -r only-give-info-when-different-to-remote or when no remote
+#     -  print branch name only when not on master [default: print branch name]
+#     -  print only when something worth saying
+#
+#   Things that make sense only in some cases:
+#     -d only give info when dirty [this would only apply to current branch]
+
+function with-print-cmd () { echo "\$\$\$\$ $@" ; "$@" ; }
+
+function echo_heading {
+    echo "${HIGHLIGHT}----" \
+         "$1" \
+         "${NORMAL}"
+}
+
+main_heading_printed_p=
+
+function print_main_heading_if_not_already_done {
+    if [[ ! "${main_heading_printed_p}" ]] ; then
+        if [[ ${main_heading} ]] ; then
+            echo "${HIGHLIGHT}${main_heading}${NORMAL}"
+        fi
+        main_heading_printed_p="YES"
+    fi
+}
+
+function maybe_print_branch {
+    local heading="$1"
+    local branch="$2"
+    if [[ "${branch}" != "master" || ! "${no_print_branch_if_master_p}" ]]
+    then
+        print_main_heading_if_not_already_done
+        echo_heading "${heading}"
+        echo ${branch}
+    fi
+}
+
+function maybe_print_short_status {
+    local output=$(git status --short) # Adding `--branch` would mention the branch and whether ahrad/behind
+    if [[ "${output}" || ! "${no_print_short_status_if_clean_p}" ]]
+    then
+        print_main_heading_if_not_already_done
+        echo_heading "Short status"
+        if [[ "${output}" ]] ; then
+            echo "${output}"
+        else
+            echo "Status is clean"
+        fi
+    fi
+}
+
+function maybe_print_ahead_or_behind_branches {
+    local output=$(git branch -vv | grep ahead\\\|behind)
+    if [[ "${output}" || ! "${no_print_ahead_or_behind_branches_if_none_p}" ]]
+    then
+        print_main_heading_if_not_already_done
+        echo_heading "Branches that are ahead or behind the remote"
+        if [[ "${output}" ]] ; then
+            echo "${output}"
+        else
+            echo "No branches are ahead or behind"
+        fi
+    fi
+}
+
+function maybe_print_local_branches_with_no_remote {
+    local output=$(git branch -vv | cut -c 3- | awk '$3 !~/\[/ { print "Only local: "$1 }')
+    local output_2=$(git branch -vv | cut -c 3- | grep "gone\]" | awk '{ print "Only local: " $1 " (but used to have a remote)"}')
+    if [[ "${output_2}" ]] ; then
+        if [[ "${output}" ]] ; then
+            output+=$'\n'
+        fi
+        output+="${output_2}"
+    fi
+    if [[ "${output}" || ! "${no_print_local_branches_with_no_remote_if_none_p}" ]]
+    then
+        print_main_heading_if_not_already_done
+        echo_heading "Local branches with no remote"
+        if [[ "${output}" ]] ; then
+            echo "${output}"
+        else
+            echo "All branches have a remote"
+        fi
+    fi
+}
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
+maybe_print_branch "Current Branch" ${current_branch}
+maybe_print_short_status
+maybe_print_ahead_or_behind_branches
+maybe_print_local_branches_with_no_remote
