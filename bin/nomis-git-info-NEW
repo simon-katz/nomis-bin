@@ -6,12 +6,12 @@ script=$(basename ${BASH_SOURCE[0]})
 
 # Switches
 main_heading=
-no_print_main_heading_if_nothing_to_print=
-no_print_branch_p=
-no_print_branch_if_master_p=
-no_print_short_status_if_clean_p=
-no_print_ahead_or_behind_branches_if_none_p=
-no_print_local_branches_with_no_remote_if_none_p=
+print_main_heading_if_nothing_to_print=
+print_branch_p=
+print_branch_if_not_master_p=
+print_short_status_if_clean_p=
+print_ahead_or_behind_branches_if_none_p=
+print_local_branches_with_no_remote_if_none_p=
 
 usage() {
     echo "Usage:"
@@ -21,10 +21,11 @@ usage() {
     echo "options:"
     echo "-h             Print this help"
     echo "-s <heading>   A heading, printed only if any output is produced"
-    echo "-m             Omit 'branch name'  section if branch is master"
-    echo "-c             Omit 'status'       section if repo is clean"
-    echo "-d             Omit 'ahead/behind' section if no branches are ahead/behind"
-    echo "-r             Omit 'no remotes'   section if all branches have a remote"
+    echo "-b             Include 'branch name'  section"
+    echo "-m             Include 'branch name'  section only if branch is not master"
+    echo "-c             Include 'status'       section even if repo is clean"
+    echo "-d             Include 'ahead/behind' section even if no branches are ahead/behind"
+    echo "-r             Include 'no remotes'   section even if all branches have a remote"
 }
 
 while getopts "hs:pmbcdr" option; do
@@ -37,22 +38,22 @@ while getopts "hs:pmbcdr" option; do
             main_heading=${OPTARG}
             ;;
         p)
-            no_print_main_heading_if_nothing_to_print="YES"
+            print_main_heading_if_nothing_to_print="YES"
             ;;
         m)
-            no_print_branch_if_master_p="YES"
+            print_branch_if_not_master_p="YES"
             ;;
         b)
-            no_print_branch_p="YES"
+            print_branch_p="YES"
             ;;
         c)
-            no_print_short_status_if_clean_p="YES"
+            print_short_status_if_clean_p="YES"
             ;;
         d)
-            no_print_ahead_or_behind_branches_if_none_p="YES"
+            print_ahead_or_behind_branches_if_none_p="YES"
             ;;
         r)
-            no_print_local_branches_with_no_remote_if_none_p=="YES"
+            print_local_branches_with_no_remote_if_none_p=="YES"
             ;;
         *)
             usage 1>&2
@@ -102,31 +103,31 @@ function print_main_heading_if_not_already_done {
 function maybe_print_branch {
     local heading="$1"
     local branch="$2"
-    if [[ ! "${no_print_branch_p}" ]] ; then
-        if [[ "${branch}" != "master" || ! "${no_print_branch_if_master_p}" ]]
+    if [[ "${print_branch_p}" \
+              || ( "${branch}" != "master" \
+                       && "${print_branch_if_not_master_p}" ) ]]
+    then
+        # TODO Add a way to not report certain non-master branches.
+        #      - To reproduce the functionality that is/was in
+        #        "nomis-git-mega-status-v2".
+        #        Perhaps a file with lines that are repo / branch pairs.
+        # echo_subheading "${heading}"
+        if [[ ! ( "${branch}" == "putting-this-here-so-i-can-align-things" \
+                      || "${branch}" == "tutorial-18" \
+                      || "${branch}" == "nomis" \
+                      || "${branch}" == "nomis-0-10-0" \
+                      || "${branch}" == "simon-post-dojo-stuff" \
+                ) ]]
         then
-            # TODO Add a way to not report certain non-master branches.
-            #      - To reproduce the functionality that is/was in
-            #        "nomis-git-mega-status-v2".
-            #        Perhaps a file with lines that are repo / branch pairs.
-            # echo_subheading "${heading}"
-            if [[ ! ( "${branch}" == "putting-this-here-so-i-can-align-things" \
-                          || "${branch}" == "tutorial-18" \
-                          || "${branch}" == "nomis" \
-                          || "${branch}" == "nomis-0-10-0" \
-                          || "${branch}" == "simon-post-dojo-stuff" \
-                    ) ]]
-            then
-                print_main_heading_if_not_already_done
-                echo "Current branch: ${branch}"
-            fi
+            print_main_heading_if_not_already_done
+            echo "Current branch: ${branch}"
         fi
     fi
 }
 
 function maybe_print_short_status {
     local output=$(git status --short) # Adding `--branch` would mention the branch and whether ahrad/behind
-    if [[ "${output}" || ! "${no_print_short_status_if_clean_p}" ]]
+    if [[ "${output}" || "${print_short_status_if_clean_p}" ]]
     then
         print_main_heading_if_not_already_done
         echo_subheading "Short status"
@@ -140,7 +141,7 @@ function maybe_print_short_status {
 
 function maybe_print_ahead_or_behind_branches {
     local output=$(git branch -vv | grep ahead\\\|behind)
-    if [[ "${output}" || ! "${no_print_ahead_or_behind_branches_if_none_p}" ]]
+    if [[ "${output}" || "${print_ahead_or_behind_branches_if_none_p}" ]]
     then
         print_main_heading_if_not_already_done
         echo_subheading "Branches that are ahead of or behind the remote"
@@ -161,7 +162,7 @@ function maybe_print_local_branches_with_no_remote {
         fi
         output+="${output_2}"
     fi
-    if [[ "${output}" || ! "${no_print_local_branches_with_no_remote_if_none_p}" ]]
+    if [[ "${output}" || "${print_local_branches_with_no_remote_if_none_p}" ]]
     then
         print_main_heading_if_not_already_done
         echo_subheading "Local branches with no remote"
@@ -175,7 +176,7 @@ function maybe_print_local_branches_with_no_remote {
 
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
-if [[ ! ${no_print_main_heading_if_nothing_to_print} ]] ; then
+if [[ ${print_main_heading_if_nothing_to_print} ]] ; then
     print_main_heading_if_not_already_done
 fi
 
