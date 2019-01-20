@@ -41,11 +41,11 @@ while getopts "hs:pmbcdrv" option; do
         p)
             print_main_heading_if_nothing_to_print="YES"
             ;;
-        m)
-            print_branch_if_not_master_p="YES"
-            ;;
         b)
             print_branch_p="YES"
+            ;;
+        m)
+            print_branch_if_not_master_p="YES"
             ;;
         c)
             print_short_status_if_clean_p="YES"
