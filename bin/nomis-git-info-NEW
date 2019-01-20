@@ -7,6 +7,7 @@ script=$(basename ${BASH_SOURCE[0]})
 # Switches
 main_heading=
 no_print_main_heading_if_nothing_to_print=
+no_print_branch_p=
 no_print_branch_if_master_p=
 no_print_short_status_if_clean_p=
 no_print_ahead_or_behind_branches_if_none_p=
@@ -26,7 +27,7 @@ usage() {
     echo "-r             Omit 'no remotes'   section if all branches have a remote"
 }
 
-while getopts "hs:pmcdr" option; do
+while getopts "hs:pmbcdr" option; do
     case "${option}" in
         h)
             usage
@@ -40,6 +41,9 @@ while getopts "hs:pmcdr" option; do
             ;;
         m)
             no_print_branch_if_master_p="YES"
+            ;;
+        b)
+            no_print_branch_p="YES"
             ;;
         c)
             no_print_short_status_if_clean_p="YES"
@@ -98,22 +102,24 @@ function print_main_heading_if_not_already_done {
 function maybe_print_branch {
     local heading="$1"
     local branch="$2"
-    if [[ "${branch}" != "master" || ! "${no_print_branch_if_master_p}" ]]
-    then
-        # TODO Add a way to not report certain non-master branches.
-        #      - To reproduce the functionality that is/was in
-        #        "nomis-git-mega-status-v2".
-        #        Perhaps a file with lines that are repo / branch pairs.
-        # echo_subheading "${heading}"
-        if [[ ! ( "${branch}" == "putting-this-here-so-i-can-align-things" \
-                      || "${branch}" == "tutorial-18" \
-                      || "${branch}" == "nomis" \
-                      || "${branch}" == "nomis-0-10-0" \
-                      || "${branch}" == "simon-post-dojo-stuff" \
-              ) ]]
+    if [[ ! "${no_print_branch_p}" ]] ; then
+        if [[ "${branch}" != "master" || ! "${no_print_branch_if_master_p}" ]]
         then
-            print_main_heading_if_not_already_done
-            echo "Current branch: ${branch}"
+            # TODO Add a way to not report certain non-master branches.
+            #      - To reproduce the functionality that is/was in
+            #        "nomis-git-mega-status-v2".
+            #        Perhaps a file with lines that are repo / branch pairs.
+            # echo_subheading "${heading}"
+            if [[ ! ( "${branch}" == "putting-this-here-so-i-can-align-things" \
+                          || "${branch}" == "tutorial-18" \
+                          || "${branch}" == "nomis" \
+                          || "${branch}" == "nomis-0-10-0" \
+                          || "${branch}" == "simon-post-dojo-stuff" \
+                    ) ]]
+            then
+                print_main_heading_if_not_already_done
+                echo "Current branch: ${branch}"
+            fi
         fi
     fi
 }
