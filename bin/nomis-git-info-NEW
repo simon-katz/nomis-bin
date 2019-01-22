@@ -87,6 +87,13 @@ NORMAL=${RESET}
 
 ################################################################################
 
+function print_in_red {
+    local lines=$1
+    while IFS= read -r line
+    do
+        echo -e "${RED}$line${NORMAL}"
+    done <<< "$1"
+}
 
 function echo_heading {
     echo -e "${HIGHLIGHT}${1}${NORMAL}"
@@ -140,7 +147,7 @@ function maybe_print_short_status {
         print_main_heading_if_not_already_done
         echo_subheading "Short status"
         if [[ "${output}" ]] ; then
-            echo "${output}"
+            print_in_red "${output}"
         else
             echo "Status is clean"
         fi
@@ -154,7 +161,7 @@ function maybe_print_ahead_or_behind_branches {
         print_main_heading_if_not_already_done
         echo_subheading "Branches that are ahead of or behind the remote"
         if [[ "${output}" ]] ; then
-            echo "${output}"
+            print_in_red "${output}"
         else
             echo "No branches are ahead or behind"
         fi
@@ -175,7 +182,7 @@ function maybe_print_local_branches_with_no_remote {
         print_main_heading_if_not_already_done
         echo_subheading "Local branches with no remote"
         if [[ "${output}" ]] ; then
-            echo "${output}"
+            print_in_red "${output}"
         else
             echo "All branches have a remote"
         fi
