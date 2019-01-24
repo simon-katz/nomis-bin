@@ -135,7 +135,8 @@ function maybe_print_branch {
                 ) ]]
         then
             print_main_heading_if_not_already_done
-            echo "Current branch: ${branch}"
+            echo_subheading "Current branch"
+            echo "${branch}"
         fi
     fi
 }
