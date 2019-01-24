@@ -6,7 +6,7 @@ fi
 
 pattern="$1"
 shift
-command_prefix="$*"
+command_prefix="$@"
 
 # echo pattern = "${pattern}"
 # echo command_prefix = "${command_prefix}"

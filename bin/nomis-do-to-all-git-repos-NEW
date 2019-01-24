@@ -19,7 +19,7 @@ NORMAL=${RESET}
 
 ################################################################################
 
-ARGS="$*"
+ARGS="$@"
 
 function do_things {
     local d="$1"
@@ -45,7 +45,7 @@ function do_things {
 
 function scan {
     #echo "`pwd`"
-    for x in $*; do
+    for x in "$@"; do
         do_things "$x"
     done
 }
