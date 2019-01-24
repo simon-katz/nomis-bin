@@ -22,32 +22,32 @@ NORMAL=${RESET}
 ARGS="$*"
 
 function do_things {
-  local d="$1"
-  if [ -d "$d" ]; then
-    if [ -e "$d/.ignore" ]; then
-      echo -e "${HIGHLIGHT}________________________________________________________________________________"
-      echo -e "${HIGHLIGHT}Ignoring $d${NORMAL}"
-    else
-      cd $d > /dev/null
-      if [ -d ".git" ]; then
-        echo -e "${HIGHLIGHT}________________________________________________________________________________"
-        echo -e "${HIGHLIGHT}$PWD$NORMAL"
-        $ARGS
-        true
-      else
-        scan *
-      fi
-      cd .. > /dev/null
+    local d="$1"
+    if [ -d "$d" ]; then
+        if [ -e "$d/.ignore" ]; then
+            echo -e "${HIGHLIGHT}________________________________________________________________________________"
+            echo -e "${HIGHLIGHT}Ignoring $d${NORMAL}"
+        else
+            cd $d > /dev/null
+            if [ -d ".git" ]; then
+                echo -e "${HIGHLIGHT}________________________________________________________________________________"
+                echo -e "${HIGHLIGHT}$PWD$NORMAL"
+                $ARGS
+                true
+            else
+                scan *
+            fi
+            cd .. > /dev/null
+        fi
     fi
-  fi
-  #echo "Exiting do_things: pwd=`pwd`"
+    #echo "Exiting do_things: pwd=`pwd`"
 }
 
 function scan {
-  #echo "`pwd`"
-  for x in $*; do
-    do_things "$x"
-  done
+    #echo "`pwd`"
+    for x in $*; do
+        do_things "$x"
+    done
 }
 
 echo -e "${HIGHLIGHT}Scanning ${PWD}${NORMAL}"
