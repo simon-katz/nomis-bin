@@ -13,7 +13,7 @@
 script=$(basename ${BASH_SOURCE[0]})
 
 # Switches
-no_print_repo_heading__when_no_output_p=
+print_repo_heading_even_when_no_output_p=
 
 usage() {
     echo "Usage:"
@@ -22,17 +22,17 @@ usage() {
     echo ""
     echo "options:"
     echo "-h             Print this help"
-    echo "-n             Don't print repo heading when there's no output for it"
+    echo "-f             Print repo heading even when there's no output for it"
 }
 
-while getopts "hn" option; do
+while getopts "hf" option; do
     case "${option}" in
         h)
             usage
             exit 0
             ;;
-        n)
-            no_print_repo_heading__when_no_output_p="YES"
+        f)
+            print_repo_heading_even_when_no_output_p="YES"
             ;;
         *)
             usage 1>&2
@@ -70,7 +70,7 @@ function do_things {
             if [ -d ".git" ]; then
                 output=$($ARGS)
                 if [[ "${output}" \
-                          || ! "${no_print_repo_heading__when_no_output_p}" ]]
+                          || "${print_repo_heading_even_when_no_output_p}" ]]
                 then
                     echo -e "${HIGHLIGHT}________________________________________________________________________________"
                     echo -e "${HIGHLIGHT}$PWD$NORMAL"
