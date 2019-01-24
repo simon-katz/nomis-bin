@@ -1,3 +1,26 @@
 #!/usr/bin/env bash -e
 
-nomis-do-to-all-git-repos-NEW nomis-git-status-NEW "$@"
+
+first_arg_list=
+second_arg_list=
+
+doing_first_arg_list_p="YES"
+
+## This is probably broken when the strings contain spaces.
+
+while [[ $# -gt 0 ]]
+do
+    if [[ "$1" == "--" ]] ; then
+        doing_first_arg_list_p=
+    else
+        if [[ "${doing_first_arg_list_p}" ]] ; then
+            first_arg_list="${first_arg_list} $1"
+        else
+            second_arg_list="${second_arg_list} $1"
+        fi
+    fi
+    shift
+done
+
+nomis-do-to-all-git-repos ${first_arg_list} \
+                          nomis-git-status-NEW "${second_arg_list}"

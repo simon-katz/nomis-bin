@@ -5,8 +5,6 @@
 script=$(basename ${BASH_SOURCE[0]})
 
 # Switches
-main_heading=
-print_main_heading_if_nothing_to_print=
 print_branch_p=
 print_branch_if_not_master_p=
 print_short_status_if_clean_p=
@@ -20,8 +18,6 @@ usage() {
     echo ""
     echo "options:"
     echo "-h             Print this help"
-    echo "-s <heading>   A heading, normally printed only if any output is produced"
-    echo "-p             Print heading even if there is no other output"
     echo "-b             Include 'branch name'  section"
     echo "-m             Include 'branch name'  section only if branch is not master"
     echo "-c             Include 'status'       section even if repo is clean"
@@ -30,17 +26,11 @@ usage() {
     echo "-v             Verbose; equivalent to -bcdr"
 }
 
-while getopts "hs:pmbcdrv" option; do
+while getopts "hmbcdrv" option; do
     case "${option}" in
         h)
             usage
             exit 0
-            ;;
-        s)
-            main_heading=${OPTARG}
-            ;;
-        p)
-            print_main_heading_if_nothing_to_print="YES"
             ;;
         b)
             print_branch_p="YES"
@@ -95,25 +85,10 @@ function print_in_red {
     done <<< "$1"
 }
 
-function echo_heading {
-    echo -e "${HIGHLIGHT}${1}${NORMAL}"
-}
-
 function echo_subheading {
     echo -e "${HIGHLIGHT}----${1}${NORMAL}"
 }
 
-main_heading_printed_p=
-
-function print_main_heading_if_not_already_done {
-    if [[ ! "${main_heading_printed_p}" ]] ; then
-        if [[ ${main_heading} ]] ; then
-            echo_heading "________________________________________________________________________________"
-            echo_heading "${main_heading}"
-        fi
-        main_heading_printed_p="YES"
-    fi
-}
 
 function maybe_print_branch {
     local heading="$1"
@@ -134,7 +109,6 @@ function maybe_print_branch {
                       || "${branch}" == "simon-post-dojo-stuff" \
                 ) ]]
         then
-            print_main_heading_if_not_already_done
             echo_subheading "Current branch"
             echo "${branch}"
         fi
@@ -145,7 +119,6 @@ function maybe_print_short_status {
     local output=$(git status --short) # Adding `--branch` would mention the branch and whether ahrad/behind
     if [[ "${output}" || "${print_short_status_if_clean_p}" ]]
     then
-        print_main_heading_if_not_already_done
         echo_subheading "Short status"
         if [[ "${output}" ]] ; then
             print_in_red "${output}"
@@ -159,7 +132,6 @@ function maybe_print_ahead_or_behind_branches {
     local output=$(git branch -vv | grep ahead\\\|behind)
     if [[ "${output}" || "${print_ahead_or_behind_branches_if_none_p}" ]]
     then
-        print_main_heading_if_not_already_done
         echo_subheading "Branches that are ahead of or behind the remote"
         if [[ "${output}" ]] ; then
             print_in_red "${output}"
@@ -180,7 +152,6 @@ function maybe_print_local_branches_with_no_remote {
     fi
     if [[ "${output}" || "${print_local_branches_with_no_remote_if_none_p}" ]]
     then
-        print_main_heading_if_not_already_done
         echo_subheading "Local branches with no remote"
         if [[ "${output}" ]] ; then
             print_in_red "${output}"
@@ -191,10 +162,6 @@ function maybe_print_local_branches_with_no_remote {
 }
 
 current_branch=$(git rev-parse --abbrev-ref HEAD)
-
-if [[ ${print_main_heading_if_nothing_to_print} ]] ; then
-    print_main_heading_if_not_already_done
-fi
 
 maybe_print_branch "Current Branch" ${current_branch}
 maybe_print_short_status

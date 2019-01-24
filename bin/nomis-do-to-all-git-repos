@@ -7,6 +7,44 @@
 # http://stackoverflow.com/questions/11981716/how-to-quickly-find-all-git-repos-under-a-directory
 # with modifications.
 
+
+#### Options and usage
+
+script=$(basename ${BASH_SOURCE[0]})
+
+# Switches
+no_print_repo_heading__when_no_output_p=
+
+usage() {
+    echo "Usage:"
+    echo ""
+    echo "$(basename ${BASH_SOURCE[0]}) [options]"
+    echo ""
+    echo "options:"
+    echo "-h             Print this help"
+    echo "-n             Don't print repo heading when there's no output for it"
+}
+
+while getopts "hn" option; do
+    case "${option}" in
+        h)
+            usage
+            exit 0
+            ;;
+        n)
+            no_print_repo_heading__when_no_output_p="YES"
+            ;;
+        *)
+            usage 1>&2
+            exit 1
+            ;;
+    esac
+done
+
+shift $((OPTIND-1))
+
+
+
 ################################################################################
 #### Colours
 
@@ -30,9 +68,17 @@ function do_things {
         else
             cd $d > /dev/null
             if [ -d ".git" ]; then
-                echo -e "${HIGHLIGHT}________________________________________________________________________________"
-                echo -e "${HIGHLIGHT}$PWD$NORMAL"
-                $ARGS
+                output=$($ARGS)
+                if [[ "${output}" \
+                          || ! "${no_print_repo_heading__when_no_output_p}" ]]
+                then
+                    echo -e "${HIGHLIGHT}________________________________________________________________________________"
+                    echo -e "${HIGHLIGHT}$PWD$NORMAL"
+                fi
+                if [[ "${output}" ]]
+                then
+                    echo -e "${output}"
+                fi
                 true
             else
                 scan *
