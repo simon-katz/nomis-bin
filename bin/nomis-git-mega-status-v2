@@ -1,3 +1,0 @@
-#!/usr/bin/env bash -e
-
-nomis-git-mega-status-v1 "$@"
