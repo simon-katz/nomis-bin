@@ -101,7 +101,6 @@ function maybe_print_branch {
         #      - To reproduce the functionality that is/was in
         #        "nomis-git-mega-status-v2".
         #        Perhaps a file with lines that are repo / branch pairs.
-        # echo_subheading "${heading}"
         if [[ ! ( "${branch}" == "putting-this-here-so-i-can-align-things" \
                       || "${branch}" == "tutorial-18" \
                       || "${branch}" == "nomis" \
@@ -109,7 +108,7 @@ function maybe_print_branch {
                       || "${branch}" == "simon-post-dojo-stuff" \
                 ) ]]
         then
-            echo_subheading "Current branch"
+            echo_subheading "${heading}"
             echo "${branch}"
         fi
     fi
