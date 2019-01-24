@@ -85,7 +85,7 @@ function print_in_red {
     done <<< "$1"
 }
 
-function echo_subheading {
+function print_heading {
     echo -e "${HIGHLIGHT}----${1}${NORMAL}"
 }
 
@@ -108,7 +108,7 @@ function maybe_print_branch {
                       || "${branch}" == "simon-post-dojo-stuff" \
                 ) ]]
         then
-            echo_subheading "${heading}"
+            print_heading "${heading}"
             echo "${branch}"
         fi
     fi
@@ -118,7 +118,7 @@ function maybe_print_short_status {
     local output=$(git status --short) # Adding `--branch` would mention the branch and whether ahrad/behind
     if [[ "${output}" || "${print_short_status_if_clean_p}" ]]
     then
-        echo_subheading "Short status"
+        print_heading "Short status"
         if [[ "${output}" ]] ; then
             print_in_red "${output}"
         else
@@ -131,7 +131,7 @@ function maybe_print_ahead_or_behind_branches {
     local output=$(git branch -vv | grep ahead\\\|behind)
     if [[ "${output}" || "${print_ahead_or_behind_branches_if_none_p}" ]]
     then
-        echo_subheading "Branches that are ahead of or behind the remote"
+        print_heading "Branches that are ahead of or behind the remote"
         if [[ "${output}" ]] ; then
             print_in_red "${output}"
         else
@@ -151,7 +151,7 @@ function maybe_print_local_branches_with_no_remote {
     fi
     if [[ "${output}" || "${print_local_branches_with_no_remote_if_none_p}" ]]
     then
-        echo_subheading "Local branches with no remote"
+        print_heading "Local branches with no remote"
         if [[ "${output}" ]] ; then
             print_in_red "${output}"
         else
