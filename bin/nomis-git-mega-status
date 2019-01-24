@@ -1,5 +1,38 @@
 #!/usr/bin/env bash -e
 
+#### Search recursively for Git repos and produce status reports on them.
+#### Use red output to highlight differences between local and remote.
+#### Use white output for other info such as branch names.
+####
+#### Usage:
+####   nomis-git-mega-status [<options-1>] [-- [<options-2>]]
+####     where
+####       <options-1> = options for nomis-do-to-all-git-repos
+####       <options-2> = options for nomis-git-status
+####
+####   See nomis-do-to-all-git-repos and nomis-git-status for details of
+####   their options.
+####
+#### Examples of use:
+####
+####   nomis-git-mega-status
+####     Produce a report for each repo that has something different between
+####     local and remote, showing just those differences.
+####
+####   nomis-git-mega-status -f
+####     Produce a report for each repo, showing just the differences between
+####     local and remote. Include reports with empty bodies (ie with just a
+####     heading identifying the repo).
+####
+####   nomis-git-mega-status -- -m
+####     Include reports of any current branches that are not master.
+####
+####   nomis-git-mega-status -- -v
+####     Produce a full report on each repo.
+####
+####   nomis-git-mega-status -f -- -v | less -NR
+####     Produce a big report and pipe the output into `less`. The -N option
+####     gives line numbers and the -R option deals with ANSI color codes.
 
 first_arg_list=
 second_arg_list=
