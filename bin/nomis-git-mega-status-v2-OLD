@@ -1,4 +1,5 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
+set -e
 
 nomis-git-mega-status-v1-OLD "$@" | \
     grep -v "^## master...origin/master$" | \

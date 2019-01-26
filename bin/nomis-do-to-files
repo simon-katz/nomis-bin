@@ -1,4 +1,5 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
+set -e
 
 if [ "$#" -lt 2 ]; then
     echo "Usage: nomis-do-to-files pattern command-prefix"

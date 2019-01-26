@@ -1,4 +1,5 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
+set -e
 
 #### Search recursively for Git repos and produce status reports on them.
 #### Use red output to highlight differences between local and remote.

@@ -1,4 +1,5 @@
-#!/usr/bin/env bash -e
+#!/usr/bin/env bash
+set -e
 
 # Do things to all git directories below current directory.
 # Skips directories that contain a file called .ignore
