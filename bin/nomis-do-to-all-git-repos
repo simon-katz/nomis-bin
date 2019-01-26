@@ -59,6 +59,14 @@ NORMAL=${RESET}
 
 ARGS="$@"
 
+function capture_output {
+    local error_file=$(mktemp)
+    stdout=$("$@" 2>${error_file})
+    status="$?"
+    stderr=$(< ${error_file})
+    rm ${error_file}
+}
+
 function do_things {
     local d="$1"
     if [ -d "$d" ]; then
@@ -68,16 +76,29 @@ function do_things {
         else
             cd $d > /dev/null
             if [ -d ".git" ]; then
-                output=$($ARGS)
-                if [[ "${output}" \
-                          || "${print_repo_heading_even_when_no_output_p}" ]]
+                # TODO Consider adding a flag to say what to do on error
+                #      (exit or continue).
+                set +e
+                capture_output $ARGS
+                set -e
+                if [[ "${print_repo_heading_even_when_no_output_p}" \
+                          || "${stdout}" \
+                          || "${stderr}" ]]
                 then
                     echo -e "${HIGHLIGHT}________________________________________________________________________________"
                     echo -e "${HIGHLIGHT}$PWD$NORMAL"
                 fi
-                if [[ "${output}" ]]
+                if [[ "${stdout}" ]]
                 then
-                    echo -e "${output}"
+                    echo -e "${stdout}"
+                fi
+                if [[ "${stderr}" ]]
+                then
+                    >&2 echo -e "${stderr}"
+                fi
+                if [[ "${status}" -ne 0 ]] ; then
+                    >&2 echo "Error -- exiting"
+                    exit 1
                 fi
                 true
             else
