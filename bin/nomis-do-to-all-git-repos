@@ -81,37 +81,38 @@ function do_things {
             echo -e "${HIGHLIGHT}________________________________________________________________________________"
             echo -e "${HIGHLIGHT}Ignoring $d${NORMAL}"
         else
-            cd "$d" > /dev/null
-            if [ -d ".git" ]; then
-                # TODO Consider adding a flag to say what to do on error
-                #      (exit or continue).
-                set +e
-                capture_output "${ARGS_ARRAY[@]}"
-                set -e
-                if [[ -n "${print_repo_heading_even_when_no_output_p}" \
-                          || -n "${stdout}" \
-                          || -n "${stderr}" ]]
-                then
-                    echo -e "${HIGHLIGHT}________________________________________________________________________________"
-                    echo -e "${HIGHLIGHT}$PWD$NORMAL"
+            (
+                cd "$d" > /dev/null
+                if [ -d ".git" ]; then
+                    # TODO Consider adding a flag to say what to do on error
+                    #      (exit or continue).
+                    set +e
+                    capture_output "${ARGS_ARRAY[@]}"
+                    set -e
+                    if [[ -n "${print_repo_heading_even_when_no_output_p}" \
+                              || -n "${stdout}" \
+                              || -n "${stderr}" ]]
+                    then
+                        echo -e "${HIGHLIGHT}________________________________________________________________________________"
+                        echo -e "${HIGHLIGHT}$PWD$NORMAL"
+                    fi
+                    if [[ -n "${stdout}" ]]
+                    then
+                        echo -e "${stdout}"
+                    fi
+                    if [[ -n "${stderr}" ]]
+                    then
+                        >&2 echo -e "${stderr}"
+                    fi
+                    if [[ -z "${no_exit_on_error}" && "${status}" -ne 0 ]] ; then
+                        >&2 echo "Error -- exiting"
+                        exit 1
+                    fi
+                    true
+                else
+                    scan ./*
                 fi
-                if [[ -n "${stdout}" ]]
-                then
-                    echo -e "${stdout}"
-                fi
-                if [[ -n "${stderr}" ]]
-                then
-                    >&2 echo -e "${stderr}"
-                fi
-                if [[ -z "${no_exit_on_error}" && "${status}" -ne 0 ]] ; then
-                    >&2 echo "Error -- exiting"
-                    exit 1
-                fi
-                true
-            else
-                scan ./*
-            fi
-            cd .. > /dev/null
+            )
         fi
     fi
     #echo "Exiting do_things: pwd=`pwd`"
