@@ -14,6 +14,7 @@ script=$(basename ${BASH_SOURCE[0]})
 
 # Switches
 print_repo_heading_even_when_no_output_p=
+no_exit_on_error=
 
 usage() {
     echo "Usage:"
@@ -23,9 +24,10 @@ usage() {
     echo "options:"
     echo "-h             Print this help"
     echo "-f             Print repo heading even when there's no output for it"
+    echo "-n             Don't exit when subcommand returns an error status"
 }
 
-while getopts "hf" option; do
+while getopts "hfn" option; do
     case "${option}" in
         h)
             usage
@@ -33,6 +35,9 @@ while getopts "hf" option; do
             ;;
         f)
             print_repo_heading_even_when_no_output_p="YES"
+            ;;
+        n)
+            no_exit_on_error="YES"
             ;;
         *)
             usage 1>&2
@@ -96,7 +101,7 @@ function do_things {
                 then
                     >&2 echo -e "${stderr}"
                 fi
-                if [[ "${status}" -ne 0 ]] ; then
+                if [[ ! "${no_exit_on_error}" && "${status}" -ne 0 ]] ; then
                     >&2 echo "Error -- exiting"
                     exit 1
                 fi
