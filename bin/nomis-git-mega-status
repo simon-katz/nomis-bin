@@ -58,4 +58,4 @@ do
 done
 
 nomis-do-to-all-git-repos ${first_arg_list} \
-                          nomis-git-status "${second_arg_list}"
+                          nomis-git-status ${second_arg_list}
