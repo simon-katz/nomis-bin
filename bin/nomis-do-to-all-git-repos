@@ -10,7 +10,7 @@
 
 #### Options and usage
 
-script=$(basename ${BASH_SOURCE[0]})
+script=$(basename "${BASH_SOURCE[0]}")
 
 # Switches
 print_repo_heading_even_when_no_output_p=
@@ -19,7 +19,7 @@ no_exit_on_error=
 usage() {
     echo "Usage:"
     echo ""
-    echo "$(basename ${BASH_SOURCE[0]}) [options]"
+    echo "${script} [options]"
     echo ""
     echo "options:"
     echo "-h             Print this help"
@@ -53,23 +53,24 @@ shift $((OPTIND-1))
 ################################################################################
 #### Colours
 
-RED=`tput setaf 1`
-GREEN=`tput setaf 2`
-RESET=`tput sgr0`
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+RESET=$(tput sgr0)
 
 HIGHLIGHT=${GREEN}
 NORMAL=${RESET}
 
 ################################################################################
 
-ARGS="$@"
+ARGS_ARRAY=( "$@" )
 
 function capture_output {
-    local error_file=$(mktemp)
-    stdout=$("$@" 2>${error_file})
+    local error_file
+    error_file=$(mktemp)
+    stdout=$("$@" 2>"${error_file}")
     status="$?"
-    stderr=$(< ${error_file})
-    rm ${error_file}
+    stderr=$(< "${error_file}")
+    rm "${error_file}"
 }
 
 function do_things {
@@ -79,35 +80,35 @@ function do_things {
             echo -e "${HIGHLIGHT}________________________________________________________________________________"
             echo -e "${HIGHLIGHT}Ignoring $d${NORMAL}"
         else
-            cd $d > /dev/null
+            cd "$d" > /dev/null
             if [ -d ".git" ]; then
                 # TODO Consider adding a flag to say what to do on error
                 #      (exit or continue).
                 set +e
-                capture_output $ARGS
+                capture_output "${ARGS_ARRAY[@]}"
                 set -e
-                if [[ "${print_repo_heading_even_when_no_output_p}" \
-                          || "${stdout}" \
-                          || "${stderr}" ]]
+                if [[ -n "${print_repo_heading_even_when_no_output_p}" \
+                          || -n "${stdout}" \
+                          || -n "${stderr}" ]]
                 then
                     echo -e "${HIGHLIGHT}________________________________________________________________________________"
                     echo -e "${HIGHLIGHT}$PWD$NORMAL"
                 fi
-                if [[ "${stdout}" ]]
+                if [[ -n "${stdout}" ]]
                 then
                     echo -e "${stdout}"
                 fi
-                if [[ "${stderr}" ]]
+                if [[ -n "${stderr}" ]]
                 then
                     >&2 echo -e "${stderr}"
                 fi
-                if [[ ! "${no_exit_on_error}" && "${status}" -ne 0 ]] ; then
+                if [[ -z "${no_exit_on_error}" && "${status}" -ne 0 ]] ; then
                     >&2 echo "Error -- exiting"
                     exit 1
                 fi
                 true
             else
-                scan *
+                scan ./*
             fi
             cd .. > /dev/null
         fi
@@ -123,4 +124,4 @@ function scan {
 }
 
 echo -e "${HIGHLIGHT}Scanning ${PWD}${NORMAL}"
-scan .
+scan ./*
