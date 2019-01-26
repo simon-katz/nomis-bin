@@ -2,7 +2,7 @@
 
 #### Options and usage
 
-script=$(basename ${BASH_SOURCE[0]})
+script=$(basename "${BASH_SOURCE[0]}")
 
 # Switches
 print_branch_p=
@@ -14,7 +14,7 @@ print_local_branches_with_no_remote_if_none_p=
 usage() {
     echo "Usage:"
     echo ""
-    echo "$(basename ${BASH_SOURCE[0]}) [options]"
+    echo "$script [options]"
     echo ""
     echo "options:"
     echo "-h             Print this help"
@@ -45,13 +45,13 @@ while getopts "hmbcdrv" option; do
             print_ahead_or_behind_branches_if_none_p="YES"
             ;;
         r)
-            print_local_branches_with_no_remote_if_none_p=="YES"
+            print_local_branches_with_no_remote_if_none_p="YES"
             ;;
         v)
             print_branch_p="YES"
             print_short_status_if_clean_p="YES"
             print_ahead_or_behind_branches_if_none_p="YES"
-            print_local_branches_with_no_remote_if_none_p=="YES"
+            print_local_branches_with_no_remote_if_none_p="YES"
             ;;
         *)
             usage 1>&2
@@ -68,9 +68,9 @@ shift $((OPTIND-1))
 ################################################################################
 #### Colours
 
-RED=`tput setaf 1`
-GREEN=`tput setaf 2`
-RESET=`tput sgr0`
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+RESET=$(tput sgr0)
 
 HIGHLIGHT=${GREEN}
 NORMAL=${RESET}
@@ -78,7 +78,6 @@ NORMAL=${RESET}
 ################################################################################
 
 function print_in_red {
-    local lines=$1
     while IFS= read -r line
     do
         echo -e "${RED}$line${NORMAL}"
@@ -115,7 +114,8 @@ function maybe_print_branch {
 }
 
 function maybe_print_short_status {
-    local output=$(git status --short) # Adding `--branch` would mention the branch and whether ahrad/behind
+    local output
+    output=$(git status --short) # Adding `--branch` would mention the branch and whether ahrad/behind
     if [[ "${output}" || "${print_short_status_if_clean_p}" ]]
     then
         print_heading "Short status"
@@ -128,7 +128,8 @@ function maybe_print_short_status {
 }
 
 function maybe_print_ahead_or_behind_branches {
-    local output=$(git branch -vv | grep ahead\\\|behind)
+    local output
+    output=$(git branch -vv | grep ahead\\\|behind)
     if [[ "${output}" || "${print_ahead_or_behind_branches_if_none_p}" ]]
     then
         print_heading "Branches that are ahead of or behind the remote"
@@ -141,8 +142,10 @@ function maybe_print_ahead_or_behind_branches {
 }
 
 function maybe_print_local_branches_with_no_remote {
-    local output=$(git branch -vv | cut -c 3- | awk '$3 !~/\[/ { print "Only local: "$1 }')
-    local output_2=$(git branch -vv | cut -c 3- | grep "gone\]" | awk '{ print "Only local: " $1 " (but used to have a remote)"}')
+    local output
+    local output_2
+    output=$(git branch -vv | cut -c 3- | awk '$3 !~/\[/ { print "Only local: "$1 }')
+    output_2=$(git branch -vv | cut -c 3- | grep "gone\]" | awk '{ print "Only local: " $1 " (but used to have a remote)"}')
     if [[ "${output_2}" ]] ; then
         if [[ "${output}" ]] ; then
             output+=$'\n'
@@ -162,7 +165,7 @@ function maybe_print_local_branches_with_no_remote {
 
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 
-maybe_print_branch "Current Branch" ${current_branch}
+maybe_print_branch "Current Branch" "${current_branch}"
 maybe_print_short_status
 maybe_print_ahead_or_behind_branches
 maybe_print_local_branches_with_no_remote
