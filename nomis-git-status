@@ -11,6 +11,7 @@ print_branch_if_not_master_p="YES"
 print_short_status_if_clean_p=
 print_ahead_or_behind_branches_if_none_p=
 print_local_branches_with_no_remote_if_none_p=
+remove_certain_lines_p=
 
 function usage {
     echo "Usage:"
@@ -26,9 +27,10 @@ function usage {
     echo "-d             Include 'ahead/behind' section even if no branches are ahead/behind"
     echo "-r             Include 'no remotes'   section even if all branches have a remote"
     echo "-v             Verbose; equivalent to -bcdr"
+    echo "-z             Look at ~/.nomis-git-status-patterns-to-ignore"
 }
 
-while getopts "hmbcdrv" option; do
+while getopts "hmbcdrvz" option; do
     case "${option}" in
         h)
             usage
@@ -54,6 +56,9 @@ while getopts "hmbcdrv" option; do
             print_short_status_if_clean_p="YES"
             print_ahead_or_behind_branches_if_none_p="YES"
             print_local_branches_with_no_remote_if_none_p="YES"
+            ;;
+        z)
+            remove_certain_lines_p="YES"
             ;;
         *)
             usage 1>&2
@@ -105,7 +110,8 @@ function contains_p {
 
 function remove_certain_lines {
     local input="$1"
-    if [[ ! -f "$HOME/.nomis-git-status-patterns-to-ignore" ]] ; then
+    if [[ ! -f "$HOME/.nomis-git-status-patterns-to-ignore" \
+              || ! ${remove_certain_lines_p} ]] ; then
         echo "$input"
     else
         local line
