@@ -1,14 +1,17 @@
 #!/usr/bin/env bash
 set -e
 
-# Do things to all git directories below current directory.
-# Skips directories that contain a file called .ignore
+#### ___________________________________________________________________________
+#### Description
+####
+#### Do things to all git directories below current directory.
+#### Skips directories that contain a file called .ignore
 
-# Copied from
-# http://stackoverflow.com/questions/11981716/how-to-quickly-find-all-git-repos-under-a-directory
-# with modifications.
+#### Copied from
+#### http://stackoverflow.com/questions/11981716/how-to-quickly-find-all-git-repos-under-a-directory
+#### with modifications.
 
-
+#### ___________________________________________________________________________
 #### Options and usage
 
 script=$(basename "${BASH_SOURCE[0]}")
@@ -17,7 +20,7 @@ script=$(basename "${BASH_SOURCE[0]}")
 print_repo_heading_even_when_no_output_p=
 no_exit_on_error=
 
-usage() {
+function usage {
     echo "Usage:"
     echo ""
     echo "${script} [options]"
@@ -49,9 +52,9 @@ done
 
 shift $((OPTIND-1))
 
+ARGS_ARRAY=( "$@" )
 
-
-################################################################################
+#### ___________________________________________________________________________
 #### Colours
 
 RED=$(tput setaf 1)
@@ -61,9 +64,8 @@ RESET=$(tput sgr0)
 HIGHLIGHT=${GREEN}
 NORMAL=${RESET}
 
-################################################################################
-
-ARGS_ARRAY=( "$@" )
+#### ___________________________________________________________________________
+#### Main functionality
 
 function capture_output {
     local error_file
