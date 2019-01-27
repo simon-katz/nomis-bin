@@ -5,8 +5,6 @@ set -e
 #### Description
 ####
 #### Search recursively for Git repos and produce status reports on them.
-#### Use red output to highlight differences between local and remote.
-#### Use white output for other info such as branch names.
 ####
 #### ___________________________________________________________________________
 #### Options and usage
@@ -14,37 +12,44 @@ set -e
 script=$(basename "${BASH_SOURCE[0]}")
 
 function usage {
+    echo "Description"
+    echo ""
+    echo "  Searches recursively for Git repos and produces status reports on them."
+    echo "  Uses red output to highlight differences between local and remote."
+    echo "  Uses white output for other info such as branch names."
+    echo ""
     echo "Usage:"
     echo ""
-    echo "To print this help:"
-    echo "  $script -h"
+    echo "  To print this help:"
+    echo "    nomis-git-mega-status -h"
     echo ""
-    echo "To run:"
-    echo "  $script [<args for nomis-git-status>] [-- <args for nomis-do-to-all-git-repos>]"
+    echo "  To run:"
+    echo "    nomis-git-mega-status [<options for nomis-git-status>]"
+    echo "                          [-- <options for nomis-do-to-all-git-repos>]"
     echo ""
-    echo "See nomis-do-to-all-git-repos and nomis-git-status for details of their options."
+    echo "  See nomis-do-to-all-git-repos and nomis-git-status for details of their options."
     echo ""
     echo "Examples:"
     echo ""
-    echo "   nomis-git-mega-status"
-    echo "     Produce a report for each repo that has something different between"
-    echo "     local and remote, showing just those differences."
-    echo "     Also report on any current non-master branches."
+    echo "  nomis-git-mega-status"
+    echo "    Produces a report for each repo that has something different between local and"
+    echo "    remote, showing just those differences."
+    echo "    Also reports on any current non-master branches."
     echo ""
-    echo "   nomis-git-mega-status -m"
-    echo "     Does not report on current non-master branches."
+    echo "  nomis-git-mega-status -m"
+    echo "    Does not report on current non-master branches."
     echo ""
-    echo "   nomis-git-mega-status -- -f"
-    echo "     Produce a report for each repo, showing just the differences between"
-    echo "     local and remote. Include reports with empty bodies (ie with just a"
-    echo "     heading identifying the repo)."
+    echo "  nomis-git-mega-status -- -f"
+    echo "    Produces a report for each repo, showing just the differences between local and"
+    echo "    remote. Includes reports with empty bodies (ie with just a heading identifying"
+    echo "    the repo)."
     echo ""
-    echo "   nomis-git-mega-status -v"
-    echo "     Produce a full report on each repo."
+    echo "  nomis-git-mega-status -v"
+    echo "    Produces a full report on each repo."
     echo ""
-    echo "   nomis-git-mega-status -v -- -f | less -NR"
-    echo "     Produce a big report and pipe the output into `less`. The -N option"
-    echo "     gives line numbers and the -R option deals with ANSI color codes."
+    echo "  nomis-git-mega-status -v -- -f | less -NR"
+    echo "    Produces a big report and pipe the output into less. (The -N option gives line"
+    echo "    numbers and the -R option deals with ANSI color codes.)"
 }
 
 if [[ "$*" == "-h" ]] ; then
