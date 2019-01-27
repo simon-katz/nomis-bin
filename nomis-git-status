@@ -93,8 +93,6 @@ function print_heading {
     echo -e "${HIGHLIGHT}----${1}${NORMAL}"
 }
 
-lines_to_ignore="$(cat "$HOME/.nomis-git-status-patterns-to-ignore")"
-
 function contains_p {
     local multi_line_string=$1
     local input=$2
@@ -108,10 +106,13 @@ function contains_p {
     return 1
 }
 
+lines_to_ignore="$(cat "$HOME/.nomis-git-status-patterns-to-ignore" \
+                       2> /dev/null)"
+
 function remove_certain_lines {
     local input="$1"
-    if [[ ! -f "$HOME/.nomis-git-status-patterns-to-ignore" \
-              || ! ${remove_certain_lines_p} ]] ; then
+    if [[ ! "${lines_to_ignore}"  \
+              || ! "${remove_certain_lines_p}" ]] ; then
         echo "$input"
     else
         local line
