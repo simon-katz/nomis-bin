@@ -11,8 +11,8 @@ set -e
 #### Usage:
 ####   nomis-git-mega-status [<options-1>] [-- [<options-2>]]
 ####     where
-####       <options-1> = options for nomis-do-to-all-git-repos
-####       <options-2> = options for nomis-git-status
+####       <options-1> = options for nomis-git-status
+####       <options-2> = options for nomis-do-to-all-git-repos
 ####
 ####   See nomis-do-to-all-git-repos and nomis-git-status for details of
 ####   their options.
@@ -24,18 +24,18 @@ set -e
 ####     local and remote, showing just those differences.
 ####     Also reports any current non-master branches.
 ####
-####   nomis-git-mega-status -- -m
+####   nomis-git-mega-status -m
 ####     Does not report on current non-master branches.
 ####
-####   nomis-git-mega-status -f
+####   nomis-git-mega-status -- -f
 ####     Produce a report for each repo, showing just the differences between
 ####     local and remote. Include reports with empty bodies (ie with just a
 ####     heading identifying the repo).
 ####
-####   nomis-git-mega-status -- -v
+####   nomis-git-mega-status -v
 ####     Produce a full report on each repo.
 ####
-####   nomis-git-mega-status -f -- -v | less -NR
+####   nomis-git-mega-status -v -- -f | less -NR
 ####     Produce a big report and pipe the output into `less`. The -N option
 ####     gives line numbers and the -R option deals with ANSI color codes.
 
@@ -64,5 +64,5 @@ done
 #### ___________________________________________________________________________
 #### Main functionality
 
-nomis-do-to-all-git-repos ${args_before_double_dash} \
-                          nomis-git-status ${args_after_double_dash}
+nomis-do-to-all-git-repos ${args_after_double_dash} \
+                          nomis-git-status ${args_before_double_dash}
