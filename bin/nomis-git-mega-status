@@ -42,10 +42,10 @@ set -e
 #### ___________________________________________________________________________
 #### Options and usage
 
-first_arg_list=
-second_arg_list=
+args_before_double_dash=
+args_after_double_dash=
 
-doing_first_arg_list_p="YES"
+doing_args_before_double_dash_p="YES"
 
 ## This is probably broken when the strings contain spaces.
 
@@ -54,12 +54,12 @@ doing_first_arg_list_p="YES"
 while [[ $# -gt 0 ]]
 do
     if [[ "$1" == "--" ]] ; then
-        doing_first_arg_list_p=
+        doing_args_before_double_dash_p=
     else
-        if [[ "${doing_first_arg_list_p}" ]] ; then
-            first_arg_list="${first_arg_list} $1"
+        if [[ "${doing_args_before_double_dash_p}" ]] ; then
+            args_before_double_dash="${args_before_double_dash} $1"
         else
-            second_arg_list="${second_arg_list} $1"
+            args_after_double_dash="${args_after_double_dash} $1"
         fi
     fi
     shift
@@ -68,5 +68,5 @@ done
 #### ___________________________________________________________________________
 #### Main functionality
 
-nomis-do-to-all-git-repos ${first_arg_list} \
-                          nomis-git-status ${second_arg_list}
+nomis-do-to-all-git-repos ${args_before_double_dash} \
+                          nomis-git-status ${args_after_double_dash}
