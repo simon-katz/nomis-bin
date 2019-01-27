@@ -22,14 +22,15 @@ set -e
 ####   nomis-git-mega-status
 ####     Produce a report for each repo that has something different between
 ####     local and remote, showing just those differences.
+####     Also reports any current non-master branches.
+####
+####   nomis-git-mega-status -- -m
+####     Does not report on current non-master branches.
 ####
 ####   nomis-git-mega-status -f
 ####     Produce a report for each repo, showing just the differences between
 ####     local and remote. Include reports with empty bodies (ie with just a
 ####     heading identifying the repo).
-####
-####   nomis-git-mega-status -- -m
-####     Include reports of any current branches that are not master.
 ####
 ####   nomis-git-mega-status -- -v
 ####     Produce a full report on each repo.

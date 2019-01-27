@@ -7,7 +7,7 @@ script=$(basename "${BASH_SOURCE[0]}")
 
 # Switches
 print_branch_p=
-print_branch_if_not_master_p=
+print_branch_if_not_master_p="YES"
 print_short_status_if_clean_p=
 print_ahead_or_behind_branches_if_none_p=
 print_local_branches_with_no_remote_if_none_p=
@@ -19,8 +19,9 @@ function usage {
     echo ""
     echo "options:"
     echo "-h             Print this help"
-    echo "-b             Include 'branch name'  section"
-    echo "-m             Include 'branch name'  section only if branch is not master"
+    echo "-b             Include 'branch name'  section always"
+    echo "-m             Exclude 'branch name'  section even when branch is not master"
+    echo "                 The -b option takes precedence over the -m option."
     echo "-c             Include 'status'       section even if repo is clean"
     echo "-d             Include 'ahead/behind' section even if no branches are ahead/behind"
     echo "-r             Include 'no remotes'   section even if all branches have a remote"
@@ -37,7 +38,7 @@ while getopts "hmbcdrv" option; do
             print_branch_p="YES"
             ;;
         m)
-            print_branch_if_not_master_p="YES"
+            print_branch_if_not_master_p=
             ;;
         c)
             print_short_status_if_clean_p="YES"
