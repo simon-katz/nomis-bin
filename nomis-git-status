@@ -125,27 +125,26 @@ function remove_certain_lines {
     fi
 }
 
-function maybe_print_branch {
+function maybe_print_branch_helper {
     local heading="$1"
     local branch="$2"
     if [[ "${print_branch_p}" \
               || ( "${branch}" != "master" \
                        && "${print_branch_if_not_master_p}" ) ]]
     then
-        # TODO Add a way to not report certain non-master branches.
-        #      - To reproduce the functionality that is/was in
-        #        "nomis-git-mega-status-v2".
-        #        Perhaps a file with lines that are repo / branch pairs.
-        if [[ ! ( "${branch}" == "putting-this-here-so-i-can-align-things" \
-                      || "${branch}" == "tutorial-18" \
-                      || "${branch}" == "nomis" \
-                      || "${branch}" == "nomis-0-10-0" \
-                      || "${branch}" == "simon-post-dojo-stuff" \
-                ) ]]
-        then
-            print_heading "${heading}"
-            echo "${branch}"
-        fi
+        echo "${branch}"
+    fi
+}
+
+function maybe_print_branch {
+    local heading="$1"
+    local branch="$2"
+    local output
+    output=$(maybe_print_branch_helper "$@")
+    output=$(remove_certain_lines "$output")
+    if [[ "${output}" ]] ; then
+        print_heading "${heading}"
+        echo "${output}"
     fi
 }
 
