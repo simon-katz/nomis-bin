@@ -47,9 +47,9 @@ function usage {
     echo "  nomis-git-mega-status -v"
     echo "    Produces a full report on each repo."
     echo ""
-    echo "  nomis-git-mega-status -v -- -f | less -NR"
-    echo "    Produces a big report and pipe the output into less. (The -N option gives line"
-    echo "    numbers and the -R option deals with ANSI color codes.)"
+    echo "  nomis-git-mega-status -v | less -NR"
+    echo "    Produces a full report on each repo and pipes the output into less."
+    echo "    (The -N option gives line numbers and the -R option deals with ANSI color codes.)"
 }
 
 if [[ "$*" == "-h" ]] ; then
