@@ -47,10 +47,6 @@ args_after_double_dash=
 
 doing_args_before_double_dash_p="YES"
 
-## This is probably broken when the strings contain spaces.
-
-## TODO Maybe you can do this by calling `getopts` twice.
-
 while [[ $# -gt 0 ]]
 do
     if [[ "$1" == "--" ]] ; then
