@@ -39,6 +39,10 @@ function usage {
     echo "  nomis-git-mega-status -m"
     echo "    Does not report on current non-master branches."
     echo ""
+    echo "  nomis-git-mega-status -m | less -NR"
+    echo "    As above, and pipes the output into less."
+    echo "    (The -N option gives line numbers and the -R option deals with ANSI color codes.)"
+    echo ""
     echo "  nomis-git-mega-status -- -f"
     echo "    Produces a report for each repo, showing just the differences between local and"
     echo "    remote. Includes reports with empty bodies (ie with just a heading identifying"
@@ -49,7 +53,6 @@ function usage {
     echo ""
     echo "  nomis-git-mega-status -v | less -NR"
     echo "    Produces a full report on each repo and pipes the output into less."
-    echo "    (The -N option gives line numbers and the -R option deals with ANSI color codes.)"
 }
 
 if [[ "$*" == "-h" ]] ; then
