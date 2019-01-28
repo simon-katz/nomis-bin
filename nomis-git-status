@@ -106,6 +106,8 @@ function contains_p {
     return 1
 }
 
+#### TODO "patterns" is a misnomer. Either fix file name or make it use patterns.
+
 lines_to_ignore="$(cat "$HOME/.nomis-git-status-patterns-to-ignore" \
                        2> /dev/null)"
 
