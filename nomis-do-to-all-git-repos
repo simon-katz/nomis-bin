@@ -65,6 +65,14 @@ HIGHLIGHT=${GREEN}
 NORMAL=${RESET}
 
 #### ___________________________________________________________________________
+#### Utils
+
+function iso_date {
+    date -u +"%Y-%m-%dT%H:%M:%SZ"
+}
+
+
+#### ___________________________________________________________________________
 #### Main functionality
 
 function capture_output {
@@ -127,5 +135,6 @@ function scan {
     done
 }
 
+echo -e "${HIGHLIGHT}$(iso_date)"
 echo -e "${HIGHLIGHT}Scanning ${PWD}${NORMAL}"
 scan .
