@@ -67,8 +67,8 @@ NORMAL=${RESET}
 #### ___________________________________________________________________________
 #### Utils
 
-function iso_date {
-    date -u +"%Y-%m-%dT%H:%M:%SZ"
+function readable_local_date_time {
+    date +"%Y-%m-%d %H:%M:%S"
 }
 
 
@@ -135,6 +135,6 @@ function scan {
     done
 }
 
-echo -e "${HIGHLIGHT}$(iso_date)"
+echo -e "${HIGHLIGHT}$(readable_local_date_time)"
 echo -e "${HIGHLIGHT}Scanning ${PWD}${NORMAL}"
 scan .
