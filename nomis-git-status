@@ -132,6 +132,7 @@ function maybe_print_branch_helper {
     local branch="$2"
     if [[ "${print_branch_p}" \
               || ( "${branch}" != "master" \
+                       && "${branch}" != "main" \
                        && "${print_branch_if_not_master_p}" ) ]]
     then
         echo "${branch}"
