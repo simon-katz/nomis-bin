@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-
-clj-kondo --lint "$(lein classpath)" --dependencies --parallel --copy-configs
